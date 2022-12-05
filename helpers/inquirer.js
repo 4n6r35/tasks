@@ -82,4 +82,73 @@ const leerInput = async (message) => {
     return desc;
 }
 
-export { inquirerMenu, pausar, leerInput }
+const Borrartask = async (tareas = []) => {
+
+    const choices = tareas.map((tarea, i) => {
+        const idx = `${i + 1}.`.red;
+        return {
+            value: tarea.id,
+            name: `${idx} ${tarea.desc}`
+        }
+    });
+    choices.unshift({
+        value: '0',
+        name: '0.'.red + 'Cancelar'
+    });
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'id_task',
+            message: 'Borrar'.bgRed,
+            choices
+        }
+    ]
+    const { id_task } = await inquirer.prompt(preguntas);
+    return id_task;
+
+}
+
+const confirmar = async (message) => {
+
+    const questionConfirm = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ]
+    const { ok } = await inquirer.prompt(questionConfirm);
+    return ok;
+}
+
+const Checklist = async (tareas = []) => {
+
+    const choices = tareas.map((tarea, i) => {
+        const idx = `${i + 1}.`.red;
+        return {
+            value: tarea.id,
+            name: `${idx} ${tarea.desc}`,
+            checked: (tarea.completadoEn) ? true : false
+        }
+    });
+    const preguntas = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Seleccion'.blue,
+            choices
+        }
+    ]
+    const { ids } = await inquirer.prompt(preguntas);
+    return ids;
+
+}
+
+export {
+    inquirerMenu,
+    pausar,
+    leerInput,
+    Checklist,
+    Borrartask,
+    confirmar
+}

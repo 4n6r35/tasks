@@ -3,7 +3,10 @@ import { guardarDB, leerDB } from './helpers/guardarArchivo.js';
 import {
     inquirerMenu,
     pausar,
-    leerInput
+    leerInput,
+    Checklist,
+    Borrartask,
+    confirmar
 } from './helpers/inquirer.js';
 import { Tareas } from './models/tareas.js';
 
@@ -28,6 +31,32 @@ const main = async () => {
 
             case '2':
                 tareas.listadoCompleto();
+                break;
+
+            case '3': //Listar completadas
+                tareas.Completadas(true);
+                break;
+
+            case '4': //Listar pendientes
+                tareas.Completadas(false);
+                break;
+
+            case '5': //Completado | Pendiente
+                const ids = await Checklist(tareas.listadoarr);
+                tareas.Togglecomplete(ids);
+                break;
+            case '6': //Borrar
+                const id = await Borrartask(tareas.listadoarr);
+                if (id !== '0') {
+                    const confirm = await confirmar('¿Estas seguro?'.bgRed)
+                    //TODO: preguntar si está seguro
+                    if (confirm) {
+                        tareas.borrarTarea(id);
+                        console.log('Tarea borrada exitosamente'.green);
+                    }
+
+                }
+
                 break;
         }
 
